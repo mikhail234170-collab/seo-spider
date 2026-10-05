@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Site Lens — New crawl{% endblock %}
+{% block content %}
+<section class="card">
+  <h1>Start a crawl</h1>
+  <p class="muted">Crawl only sites you own or have explicit permission to audit. Data stays in <code>./data/</code>.</p>
+
+  <form
+    hx-post="/crawl/start"
+    hx-target="#crawl-result"
+    hx-swap="innerHTML"
+    class="crawl-form"
+  >
+    <label>
+      Seed URL
+      <input type="url" name="seed_url" required placeholder="https://example.com/" />
+    </label>
+    <label>
+      Max URLs
+      <input type="number" name="max_urls" min="1" max="10000" value="{{ defaults.max_urls }}" />
+    </label>
+    <label>
+      Rate (requests / sec)
+      <input type="number" name="rate_per_sec" min="0.1" max="50" step="0.1" value="{{ defaults.rate }}" />
+    </label>
+    <label class="checkbox">
+      <input type="checkbox" name="permission_ack" required />
+      I confirm I own this site or have permission to crawl it.
+    </label>
+    <button type="submit">Start crawl</button>
+  </form>
+  <div id="crawl-result" class="result-area">
+    <p class="empty-state">No active crawl. Submit the form to begin.</p>
+  </div>
+</section>
+
+<section class="card">
+  <h2>Recent crawls</h2>
+  {% if crawls %}
+  <ul class="crawl-list">
+    {% for c in crawls %}
+    <li>
+      <a href="/crawl/{{ c.id }}">#{{ c.id }}</a>
+      <code>{{ c.seed_url }}</code>
+      <span class="status status-{{ c.status }}">{{ c.status }}</span>
+      {% if c.pages_crawled %}<span>{{ c.pages_crawled }} pages</span>{% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="empty-state">No crawls yet.</p>
+  {% endif %}
+</section>
+{% endblock %}

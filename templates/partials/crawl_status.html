@@ -1,0 +1,13 @@
+{% if crawl.status == 'running' or crawl.status == 'pending' %}
+<p class="loading">Crawl is <strong>{{ crawl.status }}</strong>… {{ crawl.pages_crawled or 0 }} page(s) so far.</p>
+{% elif crawl.status == 'completed' %}
+<p class="success">Crawl <strong>completed</strong> — {{ crawl.pages_crawled }} page(s).</p>
+{% elif crawl.status == 'failed' %}
+<div class="error recoverable">
+  <p>Crawl <strong>failed</strong>.</p>
+  {% if crawl.error_message %}<pre>{{ crawl.error_message }}</pre>{% endif %}
+  <p>You can start a new crawl from the <a href="/">home page</a>.</p>
+</div>
+{% else %}
+<p>Status: {{ crawl.status }}</p>
+{% endif %}

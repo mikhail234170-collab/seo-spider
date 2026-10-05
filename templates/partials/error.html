@@ -1,0 +1,6 @@
+<div class="error {% if recoverable %}recoverable{% endif %}">
+  <p>{{ message }}</p>
+  {% if recoverable %}
+  <p><a href="/">Return home</a></p>
+  {% endif %}
+</div>

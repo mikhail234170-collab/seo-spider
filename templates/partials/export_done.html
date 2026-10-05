@@ -1,0 +1,14 @@
+<div class="success">
+  <p>Export saved under <code>data/exports/</code>.</p>
+  <ul>
+    <li><a href="/crawl/{{ crawl_id }}/download/pages">Download pages CSV</a></li>
+    <li><a href="/crawl/{{ crawl_id }}/download/issues">Download issues CSV</a></li>
+    <li><a href="/crawl/{{ crawl_id }}/download/report">Download HTML report</a></li>
+  </ul>
+  <p class="muted">Paths on disk:</p>
+  <ul>
+    <li><code>{{ paths.pages_csv }}</code></li>
+    <li><code>{{ paths.issues_csv }}</code></li>
+    <li><code>{{ paths.html_report }}</code></li>
+  </ul>
+</div>

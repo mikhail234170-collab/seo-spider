@@ -1,0 +1,22 @@
+{% if crawl.status != 'completed' and crawl.status != 'failed' %}
+<p class="loading">Issues will appear when the crawl finishes…</p>
+{% elif issues %}
+<ul class="issue-list">
+  {% for i in issues %}
+  <li class="issue severity-{{ i.severity }}">
+    <strong>{{ i.title }}</strong>
+    <span class="badge">{{ i.severity }}</span>
+    <p>{{ i.remediation }}</p>
+    {% if i.evidence.affected_urls %}
+    <ul class="url-list">
+      {% for u in i.evidence.affected_urls %}
+      <li><code>{{ u }}</code></li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p class="empty-state">No issues detected.</p>
+{% endif %}

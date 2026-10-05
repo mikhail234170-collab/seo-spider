@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Crawl #{{ crawl.id }} — Site Lens{% endblock %}
+{% block content %}
+<p><a href="/">← Back</a></p>
+<h1>Crawl #{{ crawl.id }}</h1>
+<p><code>{{ crawl.seed_url }}</code></p>
+
+<div
+  id="status-panel"
+  hx-get="/crawl/{{ crawl.id }}/status"
+  hx-trigger="load, every 2s"
+  hx-swap="innerHTML"
+>
+  <p class="loading">Loading status…</p>
+</div>
+
+{% if crawl.status == 'completed' %}
+<section class="card">
+  <h2>Export</h2>
+  <button
+    hx-post="/crawl/{{ crawl.id }}/export"
+    hx-target="#export-result"
+    hx-swap="innerHTML"
+  >Export CSV + HTML report</button>
+  <div id="export-result"></div>
+</section>
+{% endif %}
+
+<section class="card">
+  <h2>Issues</h2>
+  <div
+    id="issues-panel"
+    hx-get="/crawl/{{ crawl.id }}/issues"
+    hx-trigger="load, every 3s"
+    hx-swap="innerHTML"
+  >
+    <p class="loading">Loading issues…</p>
+  </div>
+</section>
+
+<section class="card">
+  <h2>Pages ({{ pages|length }})</h2>
+  {% if pages %}
+  <table class="data-table">
+    <thead>
+      <tr><th>URL</th><th>Status</th><th>Title</th></tr>
+    </thead>
+    <tbody>
+      {% for p in pages %}
+      <tr>
+        <td><code>{{ p.url }}</code></td>
+        <td>{{ p.status_code or '—' }}</td>
+        <td>{{ p.title or '—' }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="empty-state">No pages recorded yet.</p>
+  {% endif %}
+</section>
+{% endblock %}
